@@ -30,3 +30,14 @@ func Keys(bucket string) ([]string, error) {
 	})
 	return keys, err
 }
+
+func Buckets() ([]string, error) {
+	var buckets []string
+	err := db.View(func(tx *bolt.Tx) error {
+		return tx.ForEach(func(name []byte, b *bolt.Bucket) error {
+			buckets = append(buckets, string(name))
+			return nil
+		})
+	})
+	return buckets, err
+}
