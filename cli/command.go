@@ -2,9 +2,11 @@ package cli
 
 import (
 	"boltview/boltdb"
+	"errors"
 	"fmt"
 	"github.com/c-bata/go-prompt"
 	"io/ioutil"
+	"log"
 	"os"
 	"strings"
 )
@@ -18,12 +20,16 @@ const (
 	cmdQ       = "q"
 	cmdExit    = "exit"
 	cmdBye     = "bye"
+	cmdCreate  = "create"
+	cmdSet     = "set"
 )
 
 var mapFunc = map[string]func(c *cmd) error{
 	cmdBuckets: buckets,
 	cmdKeys:    keys,
 	cmdGet:     get,
+	cmdSet:     set,
+	cmdCreate:  createBucket,
 	cmdQ:       exit,
 	cmdExit:    exit,
 	cmdBye:     exit,
@@ -83,6 +89,30 @@ func get(c *cmd) error {
 		}
 	}
 	fmt.Println(string(data))
+	return nil
+}
+
+func set(c *cmd) error {
+	if len(c.options) < 3 {
+		return errors.New("invalid params")
+	}
+	err := boltdb.Set(c.options[0], c.options[1], []byte(c.options[2]))
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
+func createBucket(c *cmd) error {
+	if len(c.options) < 1 {
+		return errors.New("invalid params")
+	}
+	err := boltdb.CreateBucket(c.options[0])
+	if err != nil {
+		log.Println(err)
+		return err
+	}
 	return nil
 }
 
