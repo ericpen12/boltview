@@ -10,9 +10,8 @@ func init() {
 }
 
 var dbCmd = &cobra.Command{
-	Use:   "db",
-	Short: "Print the version number of Hugo",
-	Long:  `All software has versions. This is Hugo's`,
+	Use:   "d",
+	Short: "Use specific DB file",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) > 0 {
 			boltdb.Open(args[0])
