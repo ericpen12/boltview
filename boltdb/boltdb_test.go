@@ -1,6 +1,8 @@
 package boltdb
 
 import (
+	"github.com/coreos/bbolt"
+	. "github.com/smartystreets/goconvey/convey"
 	"io/ioutil"
 	"testing"
 )
@@ -44,21 +46,15 @@ func TestSet(t *testing.T) {
 }
 
 func TestCreateBucket(t *testing.T) {
-	tests := []struct {
-		bucket string
-		result error
-	}{
-		{"test", nil},
-		{"test", ErrBucketExist},
-		{"123", nil},
-	}
-	for _, test := range tests {
-		err := CreateBucket(test.bucket)
-		if err != test.result {
-			t.Fatalf("bucket name is: %s, the excepted is: %v, but the actual is: %v",
-				test.bucket, test.result, err)
-		}
-	}
+	Convey("test create bucket", t, func() {
+		So(CreateBucket("bucket1"), ShouldBeNil)
+		So(CreateBucket("1bucket1"), ShouldBeNil)
+		So(CreateBucket("中文"), ShouldBeNil)
+		_ = DeleteBucket("bucket1")
+		_ = DeleteBucket("1bucket1")
+		_ = DeleteBucket("中文")
+		So(CreateBucket(""), ShouldEqual, bbolt.ErrBucketNameRequired)
+	})
 
 }
 
