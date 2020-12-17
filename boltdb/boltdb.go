@@ -87,6 +87,9 @@ func Set(bu, key string, value []byte) error {
 }
 
 func CreateBucket(bucket string) error {
+	if len(bucket) == 0 {
+		return bbolt.ErrBucketNameRequired
+	}
 	return db.Update(func(tx *bolt.Tx) error {
 		_, err := tx.CreateBucket([]byte(bucket))
 		if err == bbolt.ErrBucketExists {
