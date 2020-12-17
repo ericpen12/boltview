@@ -1,6 +1,9 @@
 package boltdb
 
 import (
+	"errors"
+	"fmt"
+	"github.com/coreos/bbolt"
 	bolt "go.etcd.io/bbolt"
 	"log"
 	"os"
@@ -8,6 +11,10 @@ import (
 )
 
 var db *bolt.DB
+
+var (
+	ErrBucketExist = errors.New("bucket already exists")
+)
 
 func Open(path string) {
 	var err error
@@ -23,8 +30,10 @@ func Keys(bucket string) ([]string, error) {
 	var keys []string
 	err := db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
+		if b == nil {
+			return errors.New(fmt.Sprintf("bucket does not exist: %s", bucket))
+		}
 		c := b.Cursor()
-
 		for k, _ := c.First(); k != nil; k, _ = c.Next() {
 			keys = append(keys, string(k))
 		}
@@ -74,9 +83,18 @@ func Set(bu, key string, value []byte) error {
 func CreateBucket(bucket string) error {
 	return db.Update(func(tx *bolt.Tx) error {
 		_, err := tx.CreateBucket([]byte(bucket))
+		if err == bbolt.ErrBucketExists {
+			return ErrBucketExist
+		}
 		if err != nil {
 			return err
 		}
 		return nil
+	})
+}
+
+func DeleteBucket(bucket string) error {
+	return db.Update(func(tx *bolt.Tx) error {
+		return tx.DeleteBucket([]byte(bucket))
 	})
 }
