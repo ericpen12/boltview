@@ -13,7 +13,8 @@ import (
 var db *bolt.DB
 
 var (
-	ErrBucketExist = errors.New("bucket already exists")
+	ErrBucketExist    = errors.New("bucket already exists")
+	ErrBucketNotExist = errors.New("bucket does not exist")
 )
 
 func Open(path string) {
@@ -96,5 +97,15 @@ func CreateBucket(bucket string) error {
 func DeleteBucket(bucket string) error {
 	return db.Update(func(tx *bolt.Tx) error {
 		return tx.DeleteBucket([]byte(bucket))
+	})
+}
+
+func DeleteKey(bucket, key string) error {
+	return db.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(bucket))
+		if b == nil {
+			return ErrBucketNotExist
+		}
+		return b.Delete([]byte(key))
 	})
 }
