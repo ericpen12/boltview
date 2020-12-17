@@ -8,9 +8,14 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 )
 
 var db *bolt.DB
+
+const (
+	defaultTimeout = time.Second * 3
+)
 
 var (
 	ErrBucketExist    = errors.New("bucket already exists")
@@ -19,10 +24,10 @@ var (
 
 func Open(path string) {
 	var err error
-	db, err = bolt.Open(path, 0666, nil)
+	db, err = bolt.Open(path, 0666, &bolt.Options{Timeout: defaultTimeout})
 	if err != nil {
-		log.Println("Cannot connect db, path: ", path)
-		os.Exit(1)
+		log.Printf("Cannot connect db: %s, err: %v", path, err)
+		os.Exit(0)
 	}
 	log.Println("connected!")
 }
