@@ -22,6 +22,8 @@ const (
 	cmdBye     = "bye"
 	cmdCreate  = "create"
 	cmdSet     = "set"
+	cmdDrop    = "drop"
+	cmdDelete  = "delete"
 )
 
 var mapFunc = map[string]func(c *cmd) error{
@@ -29,7 +31,9 @@ var mapFunc = map[string]func(c *cmd) error{
 	cmdKeys:    keys,
 	cmdGet:     get,
 	cmdSet:     set,
+	cmdDelete:  deleteKey,
 	cmdCreate:  createBucket,
+	cmdDrop:    deletesBucket,
 	cmdQ:       exit,
 	cmdExit:    exit,
 	cmdBye:     exit,
@@ -104,11 +108,35 @@ func set(c *cmd) error {
 	return nil
 }
 
+func deleteKey(c *cmd) error {
+	if len(c.options) < 2 {
+		return errors.New("invalid params")
+	}
+	err := boltdb.DeleteKey(c.options[0], c.options[1])
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
 func createBucket(c *cmd) error {
 	if len(c.options) < 1 {
 		return errors.New("invalid params")
 	}
 	err := boltdb.CreateBucket(c.options[0])
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
+func deletesBucket(c *cmd) error {
+	if len(c.options) < 1 {
+		return errors.New("invalid params")
+	}
+	err := boltdb.DeleteBucket(c.options[0])
 	if err != nil {
 		log.Println(err)
 		return err
