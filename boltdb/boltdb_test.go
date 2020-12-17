@@ -44,7 +44,33 @@ func TestSet(t *testing.T) {
 }
 
 func TestCreateBucket(t *testing.T) {
-	err := CreateBucket("test")
+	tests := []struct {
+		bucket string
+		result error
+	}{
+		{"test", nil},
+		{"test", ErrBucketExist},
+		{"123", nil},
+	}
+	for _, test := range tests {
+		err := CreateBucket(test.bucket)
+		if err != test.result {
+			t.Fatalf("bucket name is: %s, the excepted is: %v, but the actual is: %v",
+				test.bucket, test.result, err)
+		}
+	}
+
+}
+
+func TestDeleteBucket(t *testing.T) {
+	err := DeleteBucket("test")
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestDeleteKey(t *testing.T) {
+	err := DeleteKey("test", "name")
 	if err != nil {
 		t.Error(err)
 	}
