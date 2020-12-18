@@ -103,6 +103,9 @@ func CreateBucket(bucket string) error {
 }
 
 func DeleteBucket(bucket string) error {
+	if len(bucket) == 0 {
+		return bbolt.ErrBucketNameRequired
+	}
 	return db.Update(func(tx *bolt.Tx) error {
 		return tx.DeleteBucket([]byte(bucket))
 	})
