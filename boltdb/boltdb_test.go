@@ -59,10 +59,12 @@ func TestCreateBucket(t *testing.T) {
 }
 
 func TestDeleteBucket(t *testing.T) {
-	err := DeleteBucket("test")
-	if err != nil {
-		t.Fatal(err)
-	}
+	Convey("test create bucket", t, func() {
+		_ = CreateBucket("test")
+		So(DeleteBucket("test"), ShouldBeNil)
+		So(DeleteBucket("bucket1222121"), ShouldBeError)
+		So(DeleteBucket(""), ShouldEqual, bbolt.ErrBucketNameRequired)
+	})
 }
 
 func TestDeleteKey(t *testing.T) {
