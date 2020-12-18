@@ -18,14 +18,6 @@ func TestKeys(t *testing.T) {
 	t.Log(keys)
 }
 
-func TestBuckets(t *testing.T) {
-	b, err := Buckets()
-	if err != nil {
-		t.Fatal("get buckets error, ", err)
-	}
-	t.Log(b)
-}
-
 func TestGet(t *testing.T) {
 	b, err := Get("test.name")
 	if err != nil {
@@ -59,11 +51,34 @@ func TestCreateBucket(t *testing.T) {
 }
 
 func TestDeleteBucket(t *testing.T) {
-	Convey("test create bucket", t, func() {
+	Convey("test delete bucket", t, func() {
 		_ = CreateBucket("test")
 		So(DeleteBucket("test"), ShouldBeNil)
 		So(DeleteBucket("bucket1222121"), ShouldBeError)
 		So(DeleteBucket(""), ShouldEqual, bbolt.ErrBucketNameRequired)
+	})
+}
+
+func TestBuckets(t *testing.T) {
+	Convey("test lookup bucket", t, func() {
+		bucketList := []string{"lookB", "lookB2"}
+
+		// create bucket
+		for _, v := range bucketList {
+			_ = CreateBucket(v)
+		}
+		result, err := Buckets()
+		So(err, ShouldBeNil)
+
+		// check the specific bucket if it does exist
+		for _, b := range bucketList {
+			So(result, ShouldContain, b)
+		}
+
+		// delete created buckets
+		for _, v := range bucketList {
+			_ = DeleteBucket(v)
+		}
 	})
 }
 
