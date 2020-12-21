@@ -2,6 +2,7 @@ package cli
 
 import (
 	"boltview/boltdb"
+	"boltview/exec"
 	"errors"
 	"fmt"
 	"github.com/c-bata/go-prompt"
@@ -44,18 +45,13 @@ var cmdHistory []string
 func Run() {
 	for {
 		t := prompt.Input("> ", completer, prompt.OptionHistory(cmdHistory))
-		cmd := parseCmd(t)
-		if fn, ok := mapFunc[cmd.fn]; ok {
-			addHistory(cmd)
-			fn(cmd)
-		} else {
-			fmt.Println(commandNotFound, t)
-		}
+		addHistory(t)
+		exec.Run(t)
 	}
 }
 
-func addHistory(cmd *cmd) {
-	cmdHistory = append(cmdHistory, cmd.fn+" "+strings.Join(cmd.options, " "))
+func addHistory(s string) {
+	cmdHistory = append(cmdHistory, s)
 }
 
 func buckets(c *cmd) error {
@@ -129,6 +125,7 @@ func createBucket(c *cmd) error {
 		log.Println(err)
 		return err
 	}
+	fmt.Println("ok")
 	return nil
 }
 

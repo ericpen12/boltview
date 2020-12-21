@@ -27,7 +27,11 @@ func (c create) Description() string {
 	return c.description
 }
 
-func (c create) Parse() error {
+func (c create) Parse(args []string) error {
+	if len(c.options) <= 1 {
+		return nil
+	}
+	c.options = args
 	c.bucketNames = c.options[1:]
 	return nil
 }
