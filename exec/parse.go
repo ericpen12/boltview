@@ -8,11 +8,31 @@ import (
 
 const (
 	commandNotFound = "command not found:"
+
+	cmdCreate         = "create"
+	descriptionCreate = "create buckets if does not exist"
 )
 
 var (
 	ErrCommandExist = errors.New("command already exist")
 )
+
+type base struct {
+	name        string
+	cmd         string
+	description string
+	options     []string
+	fn          func(name string) error
+}
+
+type Command interface {
+	CommandName() string
+	Description() string
+	Error(err error)
+	Exec() error
+	Parse(args []string) error
+	Ok()
+}
 
 var commandMap = map[string]Command{}
 
@@ -48,14 +68,12 @@ func Run(s string) {
 		return
 	}
 	c.Ok()
-
 }
 
-type Command interface {
-	CommandName() string
-	Description() string
-	Error(err error)
-	Exec() error
-	Parse(args []string) error
-	Ok()
+func print(s string) {
+	fmt.Println(s)
+}
+
+func printOK() {
+	print("ok")
 }
