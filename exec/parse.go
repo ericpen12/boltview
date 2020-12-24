@@ -39,6 +39,7 @@ var commandMap = map[string]Command{}
 func init() {
 	addCmd(NewCmdCreate())
 	addCmd(NewCmdBuckets())
+	addCmd(newKey())
 }
 
 func addCmd(c Command) error {
