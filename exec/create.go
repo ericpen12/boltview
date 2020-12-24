@@ -10,12 +10,12 @@ type create struct {
 	bucketNames []string
 }
 
-func (c create) Description() string {
+func (c *create) Description() string {
 	return c.description
 }
 
-func (c create) Parse(args []string) error {
-	if len(c.options) <= 1 {
+func (c *create) Parse(args []string) error {
+	if len(args) <= 1 {
 		return nil
 	}
 	c.options = args
@@ -23,7 +23,7 @@ func (c create) Parse(args []string) error {
 	return nil
 }
 
-func (c create) Exec() error {
+func (c *create) Exec() error {
 	for _, name := range c.bucketNames {
 		err := boltdb.CreateBucket(name)
 		if err != nil {
@@ -33,15 +33,15 @@ func (c create) Exec() error {
 	return nil
 }
 
-func (c create) Error(err error) {
+func (c *create) Error(err error) {
 	fmt.Println(err)
 }
 
-func (c create) Ok() {
+func (c *create) Ok() {
 	printOK()
 }
 
-func (c create) CommandName() string {
+func (c *create) CommandName() string {
 	return c.name
 }
 
