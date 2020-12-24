@@ -38,6 +38,7 @@ var commandMap = map[string]Command{}
 
 func init() {
 	addCmd(NewCmdCreate())
+	addCmd(NewCmdBuckets())
 }
 
 func addCmd(c Command) error {
@@ -56,7 +57,7 @@ func Run(s string) {
 	}
 	c, ok := commandMap[args[0]]
 	if !ok {
-		fmt.Println(commandNotFound, args[0])
+		print(commandNotFound, args[0])
 		return
 	}
 	if err := c.Parse(args); err != nil {
@@ -70,8 +71,8 @@ func Run(s string) {
 	c.Ok()
 }
 
-func print(s string) {
-	fmt.Println(s)
+func print(s ...interface{}) {
+	fmt.Println(s...)
 }
 
 func printOK() {
