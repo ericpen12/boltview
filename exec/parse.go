@@ -1,29 +1,13 @@
 package exec
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 )
 
 const (
 	commandNotFound = "command not found:"
-
-	cmdCreate         = "create"
-	descriptionCreate = "create buckets if does not exist"
 )
-
-var (
-	ErrCommandExist = errors.New("command already exist")
-)
-
-type base struct {
-	name        string
-	cmd         string
-	description string
-	options     []string
-	fn          func(name string) error
-}
 
 type Command interface {
 	CommandName() string
@@ -36,19 +20,31 @@ type Command interface {
 
 var commandMap = map[string]Command{}
 
-func init() {
-	addCmd(NewCmdCreate())
-	addCmd(NewCmdBuckets())
-	addCmd(newKey())
+func register(c Command) {
+	_, ok := commandMap[c.CommandName()]
+	if !ok {
+		commandMap[c.CommandName()] = c
+	}
 }
 
-func addCmd(c Command) error {
-	if _, ok := commandMap[c.CommandName()]; ok {
-		return ErrCommandExist
-	}
+type base struct {
+	name        string
+	cmd         string
+	description string
+	options     []string
+	fn          func(name string) error
+}
 
-	commandMap[c.CommandName()] = c
-	return nil
+func (b *base) CommandName() string {
+	return b.name
+}
+
+func (b *base) Description() string {
+	return b.description
+}
+
+func (b *base) Ok() {
+	print("ok")
 }
 
 func Run(s string) {
@@ -63,6 +59,7 @@ func Run(s string) {
 	}
 	if err := c.Parse(args); err != nil {
 		c.Error(err)
+		return
 	}
 
 	if err := c.Exec(); err != nil {
@@ -72,10 +69,10 @@ func Run(s string) {
 	c.Ok()
 }
 
-func print(s ...interface{}) {
-	fmt.Println(s...)
-}
-
 func printOK() {
 	print("ok")
+}
+
+func print(s ...interface{}) {
+	fmt.Println(s...)
 }
