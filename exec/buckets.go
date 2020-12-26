@@ -13,8 +13,8 @@ type buckets struct {
 	buckets []string
 }
 
-func (b *buckets) CommandName() string {
-	return b.name
+func init() {
+	register(newBuckets())
 }
 
 func (b *buckets) Description() string {
@@ -45,13 +45,4 @@ func (b *buckets) Parse(args []string) error {
 
 func (b *buckets) Ok() {
 	print(b.buckets)
-}
-
-func NewCmdBuckets() *buckets {
-	return &buckets{base{
-		name:        cmdBuckets,
-		cmd:         cmdBuckets,
-		description: descriptionBuckets,
-		options:     nil,
-	}, nil, nil}
 }
