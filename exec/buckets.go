@@ -25,10 +25,6 @@ func newBuckets() *buckets {
 	}}
 }
 
-func (b *buckets) Error(err error) {
-	print(err)
-}
-
 func (b *buckets) Exec() error {
 	buckets, err := boltdb.Buckets()
 	if err != nil {

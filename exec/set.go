@@ -32,10 +32,6 @@ func newSet() *set {
 	}, val: map[string]string{}}
 }
 
-func (s *set) Error(err error) {
-	print(err)
-}
-
 func (s *set) Exec() error {
 	for k, v := range s.val {
 		err := boltdb.Set(s.bucket, k, []byte(v))

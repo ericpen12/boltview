@@ -37,10 +37,6 @@ func (c *create) Exec() error {
 	return nil
 }
 
-func (c *create) Error(err error) {
-	print(err)
-}
-
 func newCreate() *create {
 	return &create{base: base{
 		name:        cmdCreate,

@@ -29,18 +29,6 @@ func newKey() *key {
 	}}
 }
 
-func (k *key) CommandName() string {
-	return k.name
-}
-
-func (k *key) Description() string {
-	return k.description
-}
-
-func (k *key) Error(err error) {
-	print(err)
-}
-
 func (k *key) Exec() error {
 	var err error
 	k.keys, err = boltdb.Keys(k.bucket)
@@ -57,8 +45,4 @@ func (k *key) Parse(args []string) error {
 	k.bucket = args[1]
 	k.filter = args[2:]
 	return nil
-}
-
-func (k *key) Ok() {
-	print(k.keys)
 }
