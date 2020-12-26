@@ -2,7 +2,11 @@ package exec
 
 import (
 	"boltview/boltdb"
-	"fmt"
+)
+
+const (
+	cmdCreate         = "create"
+	descriptionCreate = "create buckets if does not exist"
 )
 
 type create struct {
@@ -10,8 +14,8 @@ type create struct {
 	bucketNames []string
 }
 
-func (c *create) Description() string {
-	return c.description
+func init() {
+	register(newCreate())
 }
 
 func (c *create) Parse(args []string) error {
@@ -34,22 +38,13 @@ func (c *create) Exec() error {
 }
 
 func (c *create) Error(err error) {
-	fmt.Println(err)
+	print(err)
 }
 
-func (c *create) Ok() {
-	printOK()
-}
-
-func (c *create) CommandName() string {
-	return c.name
-}
-
-func NewCmdCreate() *create {
-	return &create{base{
+func newCreate() *create {
+	return &create{base: base{
 		name:        cmdCreate,
 		cmd:         cmdCreate,
 		description: descriptionCreate,
-		options:     nil,
-	}, nil}
+	}}
 }
