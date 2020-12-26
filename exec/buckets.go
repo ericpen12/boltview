@@ -17,8 +17,12 @@ func init() {
 	register(newBuckets())
 }
 
-func (b *buckets) Description() string {
-	return b.description
+func newBuckets() *buckets {
+	return &buckets{base: base{
+		name:        cmdBuckets,
+		cmd:         cmdBuckets,
+		description: descriptionBuckets,
+	}}
 }
 
 func (b *buckets) Error(err error) {
