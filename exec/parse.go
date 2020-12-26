@@ -1,7 +1,6 @@
 package exec
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -39,7 +38,7 @@ func (b *base) Exec() error {
 	return nil
 }
 
-func (b *base) Parse(args []string) error {
+func (b *base) Parse([]string) error {
 	return nil
 }
 
@@ -79,12 +78,4 @@ func Run(s string) {
 		return
 	}
 	c.Ok()
-}
-
-func printOK() {
-	print("ok")
-}
-
-func print(s ...interface{}) {
-	fmt.Println(s...)
 }
