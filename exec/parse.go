@@ -35,6 +35,14 @@ type base struct {
 	fn          func(name string) error
 }
 
+func (b *base) Exec() error {
+	return nil
+}
+
+func (b *base) Parse(args []string) error {
+	return nil
+}
+
 func (b *base) CommandName() string {
 	return b.name
 }
@@ -45,6 +53,10 @@ func (b *base) Description() string {
 
 func (b *base) Ok() {
 	print("ok")
+}
+
+func (b *base) Error(err error) {
+	print(err)
 }
 
 func Run(s string) {
