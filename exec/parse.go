@@ -1,6 +1,7 @@
 package exec
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -51,11 +52,11 @@ func (b *base) Description() string {
 }
 
 func (b *base) Ok() {
-	print("ok")
+	writeToConsole("ok")
 }
 
 func (b *base) Error(err error) {
-	print(err)
+	writeToConsole(err)
 }
 
 func Run(s string) {
@@ -65,7 +66,7 @@ func Run(s string) {
 	}
 	c, ok := commandMap[args[0]]
 	if !ok {
-		print(commandNotFound, args[0])
+		writeToConsole(commandNotFound, args[0])
 		return
 	}
 	if err := c.Parse(args); err != nil {
@@ -78,4 +79,8 @@ func Run(s string) {
 		return
 	}
 	c.Ok()
+}
+
+func writeToConsole(s ...interface{}) {
+	fmt.Println(s...)
 }

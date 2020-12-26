@@ -44,5 +44,5 @@ func (b *buckets) Parse(args []string) error {
 }
 
 func (b *buckets) Ok() {
-	print(b.buckets)
+	writeToConsole(b.buckets)
 }
