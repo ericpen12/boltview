@@ -7,7 +7,7 @@ import (
 
 const (
 	cmdKeys         = "keys"
-	descriptionKeys = ""
+	descriptionKeys = "show keys from the specific bucket"
 )
 
 type key struct {
@@ -15,6 +15,10 @@ type key struct {
 	bucket string
 	filter []string
 	keys   []string
+}
+
+func init() {
+	register(newKey())
 }
 
 func newKey() *key {
@@ -34,6 +38,7 @@ func (k *key) Description() string {
 }
 
 func (k *key) Error(err error) {
+	print(err)
 }
 
 func (k *key) Exec() error {
