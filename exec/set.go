@@ -29,7 +29,7 @@ func newSet() *set {
 		name:        cmdSet,
 		cmd:         cmdSet,
 		description: descriptionSet,
-	}}
+	}, val: map[string]string{}}
 }
 
 func (s *set) Error(err error) {
