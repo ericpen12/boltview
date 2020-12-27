@@ -20,6 +20,16 @@ type Command interface {
 
 var commandMap = map[string]Command{}
 
+func CommandList() []Command {
+	result := make([]Command, len(commandMap))
+	var i int
+	for _, c := range commandMap {
+		result[i] = c
+		i++
+	}
+	return result
+}
+
 func register(c Command) {
 	_, ok := commandMap[c.CommandName()]
 	if !ok {
