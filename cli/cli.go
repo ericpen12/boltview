@@ -1,40 +1,48 @@
 package cli
 
 import (
+	"boltview/exec"
 	"github.com/c-bata/go-prompt"
 	"strings"
 )
 
-var remindMap = map[string][]prompt.Suggest{
-	cmdGet: {
-		{Text: "all"},
-		{Text: "*"},
-	},
-}
+const (
+	cmdMode = 1 + iota
+	optionMode
+)
 
-func addSuggests(key string, val []string) {
-	var su []prompt.Suggest
-	for _, v := range val {
-		su = append(su, prompt.Suggest{Text: v})
-	}
-	remindMap[key] = append(remindMap[key], su...)
-}
-
-var defaultSugget = []prompt.Suggest{
-	{Text: "buckets", Description: "List all buckets"},
-	{Text: "keys", Description: "Get all keys according to buckets"},
-	{Text: "get", Description: "show value"},
-}
+var defaultSuggest []prompt.Suggest
 
 func completer(d prompt.Document) []prompt.Suggest {
-	return prompt.FilterHasPrefix(currentRemind(d), d.GetWordBeforeCursor(), true)
+	return prompt.FilterHasPrefix(
+		suggest(d),
+		d.GetWordBeforeCursor(),
+		true,
+	)
 }
 
-func currentRemind(d prompt.Document) []prompt.Suggest {
-	c := strings.Trim(d.Text, " ")
-	if _, ok := remindMap[c]; ok || len(c) < len(d.Text) {
-		//log.Print(val)
+func suggest(d prompt.Document) []prompt.Suggest {
+	if d.Text == "" {
 		return nil
 	}
-	return defaultSugget
+	mode := len(strings.Split(d.Text, " "))
+	switch mode {
+	case cmdMode:
+		return commandSuggest()
+	}
+	return nil
+}
+
+func commandSuggest() []prompt.Suggest {
+	if defaultSuggest == nil {
+		list := exec.CommandList()
+		defaultSuggest = make([]prompt.Suggest, len(list))
+		for i, c := range list {
+			defaultSuggest[i] = prompt.Suggest{
+				Text:        c.CommandName(),
+				Description: c.Description(),
+			}
+		}
+	}
+	return defaultSuggest
 }
