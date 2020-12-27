@@ -12,10 +12,10 @@ const (
 type Command interface {
 	CommandName() string
 	Description() string
-	Error(err error)
-	Exec() error
-	Parse(args []string) error
-	Ok()
+	error(err error)
+	exec() error
+	parse(args []string) error
+	ok()
 }
 
 var commandMap = map[string]Command{}
@@ -49,7 +49,7 @@ func (b *base) Exec() error {
 	return nil
 }
 
-func (b *base) Parse([]string) error {
+func (b *base) parse([]string) error {
 	return nil
 }
 
@@ -61,11 +61,11 @@ func (b *base) Description() string {
 	return b.description
 }
 
-func (b *base) Ok() {
+func (b *base) ok() {
 	writeToConsole("ok")
 }
 
-func (b *base) Error(err error) {
+func (b *base) error(err error) {
 	writeToConsole(err)
 }
 
@@ -79,16 +79,16 @@ func Run(s string) {
 		writeToConsole(commandNotFound, args[0])
 		return
 	}
-	if err := c.Parse(args); err != nil {
-		c.Error(err)
+	if err := c.parse(args); err != nil {
+		c.error(err)
 		return
 	}
 
-	if err := c.Exec(); err != nil {
-		c.Error(err)
+	if err := c.exec(); err != nil {
+		c.error(err)
 		return
 	}
-	c.Ok()
+	c.ok()
 }
 
 func writeToConsole(s ...interface{}) {

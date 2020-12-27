@@ -29,7 +29,7 @@ func newKey() *key {
 	}}
 }
 
-func (k *key) Exec() error {
+func (k *key) exec() error {
 	var err error
 	k.keys, err = boltdb.Keys(k.bucket)
 	if err != nil {
@@ -38,11 +38,15 @@ func (k *key) Exec() error {
 	return nil
 }
 
-func (k *key) Parse(args []string) error {
+func (k *key) parse(args []string) error {
 	if len(args) < 2 {
 		return errors.New("params is invalid")
 	}
 	k.bucket = args[1]
 	k.filter = args[2:]
 	return nil
+}
+
+func (k *key) ok() {
+	writeToConsole(k.keys)
 }

@@ -32,7 +32,7 @@ func newSet() *set {
 	}, val: map[string]string{}}
 }
 
-func (s *set) Exec() error {
+func (s *set) exec() error {
 	for k, v := range s.val {
 		err := boltdb.Set(s.bucket, k, []byte(v))
 		if err != nil {
@@ -42,7 +42,7 @@ func (s *set) Exec() error {
 	return nil
 }
 
-func (s *set) Parse(args []string) error {
+func (s *set) parse(args []string) error {
 	num := len(args)
 	if num%2 != 0 || num < 4 {
 		return ErrInvalidParams

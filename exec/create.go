@@ -18,7 +18,7 @@ func init() {
 	register(newCreate())
 }
 
-func (c *create) Parse(args []string) error {
+func (c *create) parse(args []string) error {
 	if len(args) <= 1 {
 		return nil
 	}
@@ -27,7 +27,7 @@ func (c *create) Parse(args []string) error {
 	return nil
 }
 
-func (c *create) Exec() error {
+func (c *create) exec() error {
 	for _, name := range c.bucketNames {
 		err := boltdb.CreateBucket(name)
 		if err != nil {

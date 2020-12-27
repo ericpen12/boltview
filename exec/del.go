@@ -25,7 +25,7 @@ func newDel() *del {
 			}}}
 }
 
-func (d *del) Exec() error {
+func (d *del) exec() error {
 	for _, bucket := range d.bucketNames {
 		err := boltdb.DeleteBucket(bucket)
 		if err != nil {

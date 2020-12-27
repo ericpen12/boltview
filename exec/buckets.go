@@ -25,7 +25,7 @@ func newBuckets() *buckets {
 	}}
 }
 
-func (b *buckets) Exec() error {
+func (b *buckets) exec() error {
 	buckets, err := boltdb.Buckets()
 	if err != nil {
 		return err
@@ -34,7 +34,7 @@ func (b *buckets) Exec() error {
 	return nil
 }
 
-func (b *buckets) Parse(args []string) error {
+func (b *buckets) parse(args []string) error {
 	if len(b.options) <= 1 {
 		return nil
 	}
@@ -43,6 +43,6 @@ func (b *buckets) Parse(args []string) error {
 	return nil
 }
 
-func (b *buckets) Ok() {
+func (b *buckets) ok() {
 	writeToConsole(b.buckets)
 }
