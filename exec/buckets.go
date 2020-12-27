@@ -35,11 +35,11 @@ func (b *buckets) exec() error {
 }
 
 func (b *buckets) parse(args []string) error {
-	if len(b.options) <= 1 {
+	if len(b.params) <= 1 {
 		return nil
 	}
-	b.options = args
-	b.filter = b.options[1:]
+	b.params = args
+	b.filter = b.params[1:]
 	return nil
 }
 

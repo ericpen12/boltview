@@ -22,8 +22,8 @@ func (c *create) parse(args []string) error {
 	if len(args) <= 1 {
 		return nil
 	}
-	c.options = args
-	c.bucketNames = c.options[1:]
+	c.params = args
+	c.bucketNames = c.params[1:]
 	return nil
 }
 

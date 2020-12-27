@@ -41,7 +41,7 @@ type base struct {
 	name        string
 	cmd         string
 	description string
-	options     []string
+	params      []string
 	fn          func(name string) error
 }
 
