@@ -31,10 +31,29 @@ func TestGet(t *testing.T) {
 }
 
 func TestSet(t *testing.T) {
-	err := Set("test", "name", []byte("tom"))
+	b := "bucket111"
+	err := CreateBucket(b)
 	if err != nil {
-		t.Error(err)
+		t.Fatalf("create bucket error, %v", err)
 	}
+	Convey("set key (normal test)", t, func() {
+		So(Set(b, "k1", []byte("v1")), ShouldBeNil)
+		So(Set(b, "k1", []byte("v2")), ShouldBeNil)
+		So(Set(b, "k1", []byte("")), ShouldBeNil)
+	})
+
+	Convey("set key (special test)", t, func() {
+		So(Set(b, "", []byte("v1")), ShouldNotBeNil)
+		So(Set(b, "k1", nil), ShouldNotBeNil)
+	})
+	err = DeleteBucket(b)
+	if err != nil {
+		t.Fatalf("delete bucket error: %v", err)
+	}
+
+	Convey("set key (bucket does not exist)", t, func() {
+		So(Set("notSuchBucket", "k1", []byte("v1")), ShouldEqual, ErrBucketNotExist)
+	})
 }
 
 func TestCreateBucket(t *testing.T) {
