@@ -1,0 +1,66 @@
+# github.com/c-bata/go-prompt v0.2.5
+github.com/c-bata/go-prompt
+github.com/c-bata/go-prompt/internal/bisect
+github.com/c-bata/go-prompt/internal/debug
+github.com/c-bata/go-prompt/internal/strings
+github.com/c-bata/go-prompt/internal/term
+# github.com/fsnotify/fsnotify v1.4.7
+github.com/fsnotify/fsnotify
+# github.com/hashicorp/hcl v1.0.0
+github.com/hashicorp/hcl
+github.com/hashicorp/hcl/hcl/ast
+github.com/hashicorp/hcl/hcl/parser
+github.com/hashicorp/hcl/hcl/printer
+github.com/hashicorp/hcl/hcl/scanner
+github.com/hashicorp/hcl/hcl/strconv
+github.com/hashicorp/hcl/hcl/token
+github.com/hashicorp/hcl/json/parser
+github.com/hashicorp/hcl/json/scanner
+github.com/hashicorp/hcl/json/token
+# github.com/inconshreveable/mousetrap v1.0.0
+github.com/inconshreveable/mousetrap
+# github.com/magiconair/properties v1.8.1
+github.com/magiconair/properties
+# github.com/mattn/go-colorable v0.1.7
+github.com/mattn/go-colorable
+# github.com/mattn/go-isatty v0.0.12
+github.com/mattn/go-isatty
+# github.com/mattn/go-runewidth v0.0.9
+github.com/mattn/go-runewidth
+# github.com/mattn/go-tty v0.0.3
+github.com/mattn/go-tty
+# github.com/mitchellh/go-homedir v1.1.0
+github.com/mitchellh/go-homedir
+# github.com/mitchellh/mapstructure v1.1.2
+github.com/mitchellh/mapstructure
+# github.com/pelletier/go-toml v1.2.0
+github.com/pelletier/go-toml
+# github.com/pkg/term v1.1.0
+github.com/pkg/term/termios
+# github.com/spf13/afero v1.1.2
+github.com/spf13/afero
+github.com/spf13/afero/mem
+# github.com/spf13/cast v1.3.0
+github.com/spf13/cast
+# github.com/spf13/cobra v1.1.1
+github.com/spf13/cobra
+# github.com/spf13/jwalterweatherman v1.0.0
+github.com/spf13/jwalterweatherman
+# github.com/spf13/pflag v1.0.5
+github.com/spf13/pflag
+# github.com/spf13/viper v1.7.1
+github.com/spf13/viper
+# github.com/subosito/gotenv v1.2.0
+github.com/subosito/gotenv
+# go.etcd.io/bbolt v1.3.5
+go.etcd.io/bbolt
+# golang.org/x/sys v0.0.0-20200918174421-af09f7315aff
+golang.org/x/sys/internal/unsafeheader
+golang.org/x/sys/unix
+# golang.org/x/text v0.3.2
+golang.org/x/text/transform
+golang.org/x/text/unicode/norm
+# gopkg.in/ini.v1 v1.51.0
+gopkg.in/ini.v1
+# gopkg.in/yaml.v2 v2.2.8
+gopkg.in/yaml.v2
