@@ -44,3 +44,39 @@ func Buckets() ([]string, error) {
 	})
 	return buckets, err
 }
+
+func Get(field string) ([]byte, error) {
+	var bucket, key string
+	var value []byte
+	s := strings.Split(field, ".")
+	bucket = s[0]
+	if len(s) > 1 {
+		key = s[1]
+	}
+	err := db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(bucket))
+		value = append(value, b.Get([]byte(key))...)
+		return nil
+	})
+	return value, err
+}
+
+func Set(bu, key string, value []byte) error {
+	return db.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(bu))
+		if err := b.Put([]byte(key), value); err != nil {
+			return err
+		}
+		return nil
+	})
+}
+
+func CreateBucket(bucket string) error {
+	return db.Update(func(tx *bolt.Tx) error {
+		_, err := tx.CreateBucket([]byte(bucket))
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+}
