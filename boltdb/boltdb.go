@@ -3,6 +3,8 @@ package boltdb
 import (
 	bolt "go.etcd.io/bbolt"
 	"log"
+	"os"
+	"strings"
 )
 
 var db *bolt.DB
@@ -12,6 +14,7 @@ func Open(path string) {
 	db, err = bolt.Open(path, 0666, nil)
 	if err != nil {
 		log.Println("Cannot connect db, path: ", path)
+		os.Exit(1)
 	}
 	log.Println("connected!")
 }
