@@ -2,33 +2,50 @@ package cli
 
 import (
 	"boltview/boltdb"
-	"bufio"
 	"fmt"
+	"github.com/c-bata/go-prompt"
+	"io/ioutil"
 	"os"
 	"strings"
 )
 
+const (
+	commandNotFound = "command not found:"
+
+	cmdBuckets = "buckets"
+	cmdKeys    = "keys"
+	cmdGet     = "get"
+	cmdQ       = "q"
+	cmdExit    = "exit"
+	cmdBye     = "bye"
+)
+
 var mapFunc = map[string]func(c *cmd) error{
-	"bucket": buckets,
-	"keys":   keys,
-	"get":    get,
+	cmdBuckets: buckets,
+	cmdKeys:    keys,
+	cmdGet:     get,
+	cmdQ:       exit,
+	cmdExit:    exit,
+	cmdBye:     exit,
 }
 
+var cmdHistory []string
+
 func Run() {
-	scanner := bufio.NewScanner(os.Stdin)
-	fmt.Print(">>> ")
-	for scanner.Scan() {
-		cmd := parseCmd(scanner.Text())
+	for {
+		t := prompt.Input("> ", completer, prompt.OptionHistory(cmdHistory))
+		cmd := parseCmd(t)
 		if fn, ok := mapFunc[cmd.fn]; ok {
+			addHistory(cmd)
 			fn(cmd)
 		} else {
-			fmt.Println(scanner.Text(), "not exist")
+			fmt.Println(commandNotFound, t)
 		}
-		if scanner.Text() == "q" {
-			break
-		}
-		fmt.Print(">>> ")
 	}
+}
+
+func addHistory(cmd *cmd) {
+	cmdHistory = append(cmdHistory, cmd.fn+" "+strings.Join(cmd.options, " "))
 }
 
 func buckets(c *cmd) error {
@@ -36,6 +53,7 @@ func buckets(c *cmd) error {
 	if err != nil {
 		return err
 	}
+	addSuggests(cmdKeys, bu)
 	fmt.Println(bu)
 	return nil
 }
@@ -53,6 +71,16 @@ func get(c *cmd) error {
 	data, err := boltdb.Get(c.options[0])
 	if err != nil {
 		return err
+	}
+	if len(c.options) > 2 {
+		if c.options[1] == "-f" {
+			err := ioutil.WriteFile(c.options[2], data, 0700)
+			if err != nil {
+				return err
+			}
+			fmt.Println("ok")
+			return nil
+		}
 	}
 	fmt.Println(string(data))
 	return nil
@@ -72,4 +100,9 @@ func parseCmd(input string) *cmd {
 	}
 	c.options = s[1:]
 	return c
+}
+
+func exit(*cmd) error {
+	os.Exit(0)
+	return nil
 }
