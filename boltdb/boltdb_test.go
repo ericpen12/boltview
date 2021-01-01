@@ -3,7 +3,6 @@ package boltdb
 import (
 	"github.com/coreos/bbolt"
 	. "github.com/smartystreets/goconvey/convey"
-	"io/ioutil"
 	"testing"
 )
 
@@ -43,15 +42,44 @@ func TestKeys(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
-	b, err := Get("test.name")
+	bucket := "bucket_test_get"
+	err := CreateBucket(bucket)
 	if err != nil {
-		t.Fatal(err)
+		t.Error(err)
 	}
-	if b == nil {
-		t.Fatal("get empty")
+	Convey("test: get (normal test)", t, func() {
+		k := "k"
+		v := []byte("v")
+		err := Set(bucket, k, v)
+		if err != nil {
+			t.Error(err)
+		}
+
+		value, err := Get(bucket, k)
+		So(string(value), ShouldEqual, string(v))
+		So(err, ShouldBeNil)
+
+		value, err = Get(bucket, "key_not_exist_test_get")
+		So(value, ShouldBeNil)
+		So(err, ShouldBeNil)
+
+	})
+
+	Convey("test: get (invalid key)", t, func() {
+		k := ""
+		value, err := Get(bucket, k)
+		So(value, ShouldBeNil)
+		So(err, ShouldNotBeNil)
+	})
+	err = DeleteBucket(bucket)
+	if err != nil {
+		t.Fatalf("delete bucket error: %v", err)
 	}
-	ioutil.WriteFile("pay.json", b, 0700)
-	t.Log(string(b))
+	Convey("test: get (invalid bucket)", t, func() {
+		value, err := Get("bucket_not_exist_test_get", "key")
+		So(value, ShouldBeNil)
+		So(err, ShouldNotBeNil)
+	})
 }
 
 func TestSet(t *testing.T) {
