@@ -1,6 +1,6 @@
-package exec
+package parser
 
-import "boltview/boltdb"
+import "boltview/pkg/boltdb"
 
 const (
 	cmdBuckets         = "buckets"
