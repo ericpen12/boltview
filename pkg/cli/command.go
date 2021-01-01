@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"boltview/exec"
+	"boltview/pkg/parser"
 	"github.com/c-bata/go-prompt"
 )
 
@@ -11,7 +11,7 @@ func Run() {
 	for {
 		t := prompt.Input("> ", completer, prompt.OptionHistory(cmdHistory))
 		addHistory(t)
-		exec.Run(t)
+		parser.Run(t)
 	}
 }
 

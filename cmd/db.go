@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"boltview/boltdb"
+	"boltview/pkg/boltdb"
 	"github.com/spf13/cobra"
 )
 

@@ -1,7 +1,7 @@
-package exec
+package parser
 
 import (
-	"boltview/boltdb"
+	"boltview/pkg/boltdb"
 	"io/ioutil"
 	"sort"
 	"strings"

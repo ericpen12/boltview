@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"boltview/exec"
+	"boltview/pkg/parser"
 	"github.com/c-bata/go-prompt"
 	"strings"
 )
@@ -35,7 +35,7 @@ func suggest(d prompt.Document) []prompt.Suggest {
 
 func commandSuggest() []prompt.Suggest {
 	if defaultSuggest == nil {
-		list := exec.CommandList()
+		list := parser.CommandList()
 		defaultSuggest = make([]prompt.Suggest, len(list))
 		for i, c := range list {
 			defaultSuggest[i] = prompt.Suggest{
