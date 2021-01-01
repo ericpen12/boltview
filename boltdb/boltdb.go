@@ -7,7 +7,6 @@ import (
 	bolt "go.etcd.io/bbolt"
 	"log"
 	"os"
-	"strings"
 	"time"
 )
 
@@ -60,17 +59,20 @@ func Buckets() ([]string, error) {
 	return buckets, err
 }
 
-func Get(field string) ([]byte, error) {
-	var bucket, key string
+func Get(bucket, key string) ([]byte, error) {
 	var value []byte
-	s := strings.Split(field, ".")
-	bucket = s[0]
-	if len(s) > 1 {
-		key = s[1]
+	if len(bucket) <= 0 {
+		return nil, bbolt.ErrBucketNameRequired
+	}
+	if len(key) <= 0 {
+		return nil, bbolt.ErrKeyRequired
 	}
 	err := db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
-		value = append(value, b.Get([]byte(key))...)
+		if b == nil {
+			return ErrBucketNotExist
+		}
+		value = b.Get([]byte(key))
 		return nil
 	})
 	return value, err
