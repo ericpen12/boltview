@@ -11,11 +11,35 @@ func init() {
 	Open("../db/test.db")
 }
 func TestKeys(t *testing.T) {
-	keys, err := Keys("test")
+	bucket := "bucket_test_keys"
+	err := CreateBucket(bucket)
 	if err != nil {
-		t.Fatal("get keys err, ", err)
+		t.Error(err)
 	}
-	t.Log(keys)
+	Convey("test: set (normal test)", t, func() {
+		keys, err := Keys(bucket)
+		So(keys, ShouldBeNil)
+		So(err, ShouldBeNil)
+
+		err = Set(bucket, "k", []byte("v"))
+		if err != nil {
+			t.Error(err)
+		}
+
+		keys, err = Keys(bucket)
+		So(keys, ShouldNotBeNil)
+		So(err, ShouldBeNil)
+		err = DeleteBucket(bucket)
+		if err != nil {
+			t.Error(err)
+		}
+	})
+
+	Convey("test: set (if bucket does not exist", t, func() {
+		keys, err := Keys("bucket_not_exist_test_keys")
+		So(keys, ShouldBeNil)
+		So(err, ShouldNotBeNil)
+	})
 }
 
 func TestGet(t *testing.T) {
