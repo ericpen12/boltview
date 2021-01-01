@@ -25,7 +25,8 @@ func init() {
 
 type get struct {
 	base
-	field   string
+	bucket  string
+	key     string
 	options []option
 	data    []byte
 	result  interface{}
@@ -44,8 +45,10 @@ func (g *get) parse(args []string) error {
 		return ErrInvalidParams
 	}
 	g.params = args
-	g.field = args[1]
 	g.options = nil
+	field := strings.Split(args[1], ".")
+	g.bucket = field[0]
+	g.key = field[1]
 
 	for i := 2; i < len(args); i += 2 {
 		v, ok := optionMap[args[i]]
@@ -64,7 +67,7 @@ func (g *get) ok() {
 
 func (g *get) exec() error {
 	var err error
-	g.data, err = boltdb.Get(g.field)
+	g.data, err = boltdb.Get(g.bucket, g.key)
 	if err != nil {
 		return err
 	}
