@@ -114,6 +114,9 @@ func DeleteBucket(bucket string) error {
 }
 
 func DeleteKey(bucket, key string) error {
+	if len(key) == 0 {
+		return bbolt.ErrKeyRequired
+	}
 	return db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
 		if b == nil {
