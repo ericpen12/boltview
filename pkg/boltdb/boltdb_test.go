@@ -91,7 +91,7 @@ func TestSet(t *testing.T) {
 	Convey("set key (normal test)", t, func() {
 		So(Set(b, "k1", []byte("v1")), ShouldBeNil)
 		So(Set(b, "k1", []byte("v2")), ShouldBeNil)
-		So(Set(b, "k1", []byte("")), ShouldBeNil)
+		So(Set(b, "k1", []byte("")), ShouldNotBeNil)
 	})
 
 	Convey("set key (special test)", t, func() {
