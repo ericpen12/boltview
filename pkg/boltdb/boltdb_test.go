@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	Open("../db/test.db")
+	Open("../../db/test.db")
 }
 func TestKeys(t *testing.T) {
 	bucket := "bucket_test_keys"
@@ -154,8 +154,26 @@ func TestBuckets(t *testing.T) {
 }
 
 func TestDeleteKey(t *testing.T) {
-	err := DeleteKey("test", "name")
+	b := "bucket_delete_key"
+	err := CreateBucket(b)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
+	defer DeleteBucket(b)
+
+	Convey("normal test", t, func() {
+		keys := []string{"11", "22", "33"}
+		for _, k := range keys {
+			err = Set(b, k, []byte(k))
+			if err != nil {
+				t.Fatal(err)
+			}
+			So(DeleteKey(b, k), ShouldBeNil)
+		}
+	})
+	Convey("bad test", t, func() {
+		So(DeleteKey(b, ""), ShouldBeError)
+		So(DeleteKey(b, "key_not_exist"), ShouldBeNil)
+		So(DeleteKey("bucket_not_exist", "key_not_exist"), ShouldBeError)
+	})
 }
