@@ -79,8 +79,14 @@ func Get(bucket, key string) ([]byte, error) {
 }
 
 func Set(bu, key string, value []byte) error {
+	if len(value) == 0 {
+		return bbolt.ErrIncompatibleValue
+	}
 	return db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bu))
+		if b == nil {
+			return ErrBucketNotExist
+		}
 		if err := b.Put([]byte(key), value); err != nil {
 			return err
 		}
