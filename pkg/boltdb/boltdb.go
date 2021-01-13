@@ -131,3 +131,24 @@ func DeleteKey(bucket, key string) error {
 		return b.Delete([]byte(key))
 	})
 }
+
+func Range(bucket string, min, max string, compare func(k, v []byte) interface{}) (interface{}, error) {
+	var result []interface{}
+	err := db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(bucket))
+		if b == nil {
+			return ErrBucketNotExist
+		}
+		c := b.Cursor()
+		for k, v := c.Seek([]byte(min)); k != nil; k, v = c.Next() {
+			if res := compare(k, v); res != nil {
+				result = append(result, res)
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
