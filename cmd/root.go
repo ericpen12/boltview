@@ -11,6 +11,7 @@ import (
 var (
 	cfgFile     string
 	userLicense string
+	Release     bool
 
 	rootCmd = &cobra.Command{
 		Use:   "hugo",
@@ -39,6 +40,7 @@ func init() {
 	rootCmd.PersistentFlags().StringP("author", "a", "YOUR NAME", "author name for copyright attribution")
 	rootCmd.PersistentFlags().StringVarP(&userLicense, "license", "l", "", "name of license for the project")
 	rootCmd.PersistentFlags().Bool("viper", true, "use Viper for configuration")
+	rootCmd.PersistentFlags().BoolVarP(&Release, "release", "r", false, "use Viper for configuration")
 	viper.BindPFlag("author", rootCmd.PersistentFlags().Lookup("author"))
 	viper.BindPFlag("useViper", rootCmd.PersistentFlags().Lookup("viper"))
 	viper.SetDefault("author", "NAME HERE <EMAIL ADDRESS>")
